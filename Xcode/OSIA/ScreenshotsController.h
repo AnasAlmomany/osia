@@ -15,6 +15,8 @@
 
 @property (nonatomic, copy) void (^didSelectSource)();
 
+@property (nonatomic, strong) NSString *appName;
+
 @property (nonatomic, strong) NSArray *screenshots;
 
 /* Buttons */

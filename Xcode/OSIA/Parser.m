@@ -88,7 +88,7 @@ static NSString * const kArchive = @"archive";
     NSMutableDictionary *subCategories = [[NSMutableDictionary alloc] init];
     
     Data *main = [[Data alloc] init];
-    main.name = @"Open-Source iOS Apps";
+    main.name = @"OSIA";
     main.categoryId = @"root";
     
     NSArray *categories = json[@"categories"];

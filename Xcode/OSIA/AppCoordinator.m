@@ -78,6 +78,7 @@
     BOOL hasScreenshots = screenshots.count>0;
     if (hasScreenshots) {
         ScreenshotsController *controller = [[ScreenshotsController alloc] init];
+        controller.appName = app[@"title"];
         controller.screenshots = screenshots;
         controller.hideLeftButton = appStoreLink == nil;
         controller.sourceTitle = [url.absoluteString.lowercaseString containsString:@"//github.com"] ? @"GitHub" : @"Source";

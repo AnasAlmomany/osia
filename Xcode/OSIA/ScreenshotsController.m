@@ -100,11 +100,25 @@
 
 - (void)render;
 {
-    NSString *title = [NSString stringWithFormat:@"%@ Screenshot%@",
-                       @(self.screenshots.count),
-                       self.screenshots.count==1?@"":@"s"
-                       ];
-    self.title = title;
+    self.title = self.appName;
+    
+    {
+        UILabel *t = [UILabel new];
+        t.numberOfLines = 2;
+        
+        NSString *title = [NSString stringWithFormat:@"%@\n%@ screenshot%@",
+                           self.appName,
+                           @(self.screenshots.count),
+                           self.screenshots.count==1?@"":@"s"
+                           ];
+        
+        t.text = title;
+        t.textAlignment = NSTextAlignmentCenter;
+        
+        [t sizeToFit];
+        
+        self.navigationItem.titleView = t;
+    }
     
     [self.collectionView reloadData];
     
@@ -117,41 +131,56 @@ static NSString * const kCollectionId = @"kCollectionId";
 
 - (void)setup;
 {
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    
-    self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
     if (@available(iOS 11, *))
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     self.view.backgroundColor = [UIColor blackColor];
     
-    [self.view addSubview:self.collectionView];
-    self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    self.collectionView.pagingEnabled = YES;
-    [self.collectionView registerClass:[ScreenshotCell class] forCellWithReuseIdentifier:kCollectionId];
-    
-    // buttons
-    UIView *container = [[UIView alloc] init];
-        
     {
-        [self.view addSubview:container];
-        container.translatesAutoresizingMaskIntoConstraints = NO;
-        NSDictionary *views = @{@"container":container};
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        
+        self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+        
+        self.collectionView.delegate = self;
+        self.collectionView.dataSource = self;
+        self.collectionView.pagingEnabled = YES;
+        [self.collectionView registerClass:[ScreenshotCell class] forCellWithReuseIdentifier:kCollectionId];
+    }
+    
+    {
+        [self.leftButton  setTitle:@"App Store"  forState:UIControlStateNormal];
+        [self.leftButton  addTarget:self action:@selector(actionLeft)  forControlEvents:UIControlEventTouchUpInside];
+        [self.rightButton addTarget:self action:@selector(actionRight) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    // layout
+    UIView *container = [[UIView alloc] init];
+    
+    {
+        UIView *empty = [[UIView alloc] init];
+        
+        [@[empty, self.collectionView, container] enumerateObjectsUsingBlock:^(UIView *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.view addSubview:obj];
+            obj.translatesAutoresizingMaskIntoConstraints = NO;
+        }];
+        
+        NSDictionary *views = @{ @"container": container,
+                                 @"col": self.collectionView,
+                                 @"empty": empty
+                                };
         NSDictionary *metrics = @{ @"h": @50 };
         NSArray *formats = @[
+                             @"|-[col]-|",
                              @"|[container]|",
-                             @"V:[container(h)]|"
+                             @"|[empty]|",
+                             
+                             @"V:|-[empty(h)]-[col][container(h)]|"
                              ];
         [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:obj options:kNilOptions metrics:metrics views:views];
             [self.view addConstraints:constraints];
         }];
     }
-    
-    [self.leftButton setTitle:@"App Store"  forState:UIControlStateNormal];
     
     {
         NSDictionary *views = @{
@@ -173,9 +202,6 @@ static NSString * const kCollectionId = @"kCollectionId";
             [container addConstraints:constraints];
         }];
     }
-    
-    [self.leftButton  addTarget:self action:@selector(actionLeft)  forControlEvents:UIControlEventTouchUpInside];
-    [self.rightButton addTarget:self action:@selector(actionRight) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)actionLeft;
@@ -207,8 +233,7 @@ static NSString * const kCollectionId = @"kCollectionId";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
-    CGSize size = self.view.bounds.size;
-    size.height -= 170;
+    CGSize size = self.collectionView.bounds.size;
     
     return size;
 }
