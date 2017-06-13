@@ -74,13 +74,13 @@ static NSString * const kSwiftMarker = @" Swift ";
 
 - (void)setup;
 {
-    self.navigationController.navigationBar.barTintColor = self.swiftColor;
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
-    UIColor *color = [UIColor whiteColor];
+    UIColor *color = self.swiftColor;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:color};
     self.navigationController.navigationBar.tintColor = color;
     
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.tableView];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView.dataSource = self;
