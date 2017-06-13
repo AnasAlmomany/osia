@@ -133,6 +133,9 @@ static NSString * const kCollectionId = @"kCollectionId";
 {
     if (@available(iOS 11, *))
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    
     self.view.backgroundColor = [UIColor blackColor];
     
     {
