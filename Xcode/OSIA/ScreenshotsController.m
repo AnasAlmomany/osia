@@ -121,6 +121,9 @@ static NSString * const kCollectionId = @"kCollectionId";
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+    if (@available(iOS 11, *))
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    self.view.backgroundColor = [UIColor blackColor];
     
     [self.view addSubview:self.collectionView];
     self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

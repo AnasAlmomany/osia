@@ -23,6 +23,8 @@
     // Override point for customization after application launch.
     
     UINavigationController *n = [[UINavigationController alloc] init];
+    if (@available(iOS 11, *))
+        n.navigationBar.prefersLargeTitles = YES;
     AppCoordinator *c = [[AppCoordinator alloc] initWithNavigationController:n];
     [c start];
     self.appCoordinator = c;
