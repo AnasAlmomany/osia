@@ -49,6 +49,8 @@
 
 - (void)setup;
 {
+    self.backgroundColor = [UIColor whiteColor];
+    
     _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
     _spinner = [[UIActivityIndicatorView alloc] initWithFrame:self.bounds];
     
@@ -134,9 +136,11 @@ static NSString * const kCollectionId = @"kCollectionId";
     if (@available(iOS 11, *))
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    
-    self.view.backgroundColor = [UIColor blackColor];
+    {
+        UIColor *color = [UIColor whiteColor];
+        self.navigationController.navigationBar.barTintColor = color;
+        self.view.backgroundColor = color;
+    }
     
     {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -151,6 +155,10 @@ static NSString * const kCollectionId = @"kCollectionId";
     }
     
     {
+        UIColor *color = [UIColor blackColor];
+        [self.leftButton  setTitleColor:color forState:UIControlStateNormal];
+        [self.rightButton setTitleColor:color forState:UIControlStateNormal];
+        
         [self.leftButton  setTitle:@"App Store"  forState:UIControlStateNormal];
         [self.leftButton  addTarget:self action:@selector(actionLeft)  forControlEvents:UIControlEventTouchUpInside];
         [self.rightButton addTarget:self action:@selector(actionRight) forControlEvents:UIControlEventTouchUpInside];
